@@ -23,7 +23,7 @@ make
 ```
 
 
-3. Once the build is completed, a binary named `robot_challenge` should be created on the root folder. Execute this command to run the binary
+3. Once the build is completed, a binary named `robot_challenge` should be created on the root folder. Execute this command to run the binary.
 
 For Linux or MacOS:
 ```bash
@@ -52,9 +52,7 @@ make
 
 3. Once the build is completed, a binary named `test_robot_challenge` should be created on the root folder. Note that to run an integration test,
 a separate file that contains commands should be created and should be supplied as an argument to the test binary.
-`test/testCommand.txt` is created for this purpose
-
-Execute this command to run tests:
+`test/testCommand.txt` is created for this purpose. Execute this command to run the test.
 
 For Linux or MacOS:
 ```bash
