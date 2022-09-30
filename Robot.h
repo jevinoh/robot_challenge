@@ -16,12 +16,12 @@ public:
     int  GetCoordinateX() const;
     int  GetCoordinateY() const;
     FACE_DIRECTION GetFacingDirection() const;
+    CoordinateAndDirection GetRobotCoordinateAndDirection() const;
 
     void SetCoordinateX(int xVal);
     void SetCoordinateY(int yVal);
     void SetFacingDirection(FACE_DIRECTION dir);
 
 private:
-    int x, y;
-    FACE_DIRECTION direction = FACE_DIRECTION::NORTH;
+    CoordinateAndDirection info;
 };

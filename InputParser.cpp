@@ -1,9 +1,9 @@
-#include "InputController.h"
+#include "InputParser.h"
 
 #include <vector>
 #include <algorithm>
 
-const std::map<std::string, ACTION> InputController::input_actions = {
+const std::map<std::string, ACTION> InputParser::input_actions = {
     { "PLACE",  ACTION::PLACE  },
     { "MOVE",   ACTION::MOVE   },
     { "LEFT",   ACTION::LEFT   },
@@ -11,7 +11,7 @@ const std::map<std::string, ACTION> InputController::input_actions = {
     { "REPORT", ACTION::REPORT }
 };
 
-const std::map<std::string, FACE_DIRECTION> InputController::input_direction = {
+const std::map<std::string, FACE_DIRECTION> InputParser::input_direction = {
     { "NORTH",  FACE_DIRECTION::NORTH  },
     { "EAST",   FACE_DIRECTION::EAST   },
     { "SOUTH",  FACE_DIRECTION::SOUTH  },
@@ -22,11 +22,11 @@ const std::map<std::string, FACE_DIRECTION> InputController::input_direction = {
 static const std::vector<std::string> delimiter = { " ", ",", ","};
 
 
-InputController::InputController()
+InputParser::InputParser()
 {
 }
 
-bool InputController::isNumber(std::string s)
+bool InputParser::isNumber(std::string s)
 {
     for (int i = 0; i < s.length(); i++)
     {
@@ -38,19 +38,19 @@ bool InputController::isNumber(std::string s)
     return true;
 }
 
-std::string InputController::removeSpaces(std::string str)
+std::string InputParser::removeSpaces(std::string str)
 {
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
     return str;
 }
 
-CommandInfo InputController::Parse(std::string input)
+CommandInfo InputParser::Parse(std::string input)
 {
     CommandInfo info;
     size_t pos = 0;
     std::string token;
     int input_counter = 0;
-
+    int num_set_params = 0;
     // Ignore if first character is '#' . Input might be from a test file and it's a comment section
     if(input.length() > 0 && input.at(0) == '#')
     {
@@ -71,10 +71,12 @@ CommandInfo InputController::Parse(std::string input)
             if(it != input_actions.end())
             {
                 info.act = input_actions.at(token);
+                num_set_params++;
             }
             else
             {
                 std::cerr << "[ERROR] Command not found, invalid input string" << std::endl;
+                info.reset();
                 return info;
             }
         }
@@ -84,18 +86,19 @@ CommandInfo InputController::Parse(std::string input)
             if(isNumber(token))
             {
                 input_counter == 1? info.x = stoi(token) : info.y = stoi(token);
+                num_set_params++;
             }
             else
             {
-                info.act = ACTION::UNKNOWN;
                 std::cerr << "[ERROR] coordinate input is not a number" << std::endl;
+                info.reset();
                 return info;
             }
         }
         else
         {
             std::cerr << "[ERROR] Extra strings were added: " + input << std::endl;
-            info.act = ACTION::UNKNOWN;
+            info.reset();
             return info;
         }
 
@@ -104,6 +107,13 @@ CommandInfo InputController::Parse(std::string input)
         {
             input_counter++;
         }
+    }
+
+    if((info.act == ACTION::PLACE) && (num_set_params < 3))
+    {
+        printf("[ERROR] Needs additional parameters for PLACE command, parameter detects only %d\n", num_set_params);
+        info.reset();
+        return info;
     }
 
     token = removeSpaces(input);
@@ -123,14 +133,13 @@ CommandInfo InputController::Parse(std::string input)
             if((info.act == ACTION::PLACE))
             {
                 std::cerr << "[ERROR] Needs additional parameters for: " +  token << std::endl;
-                info.act = ACTION::UNKNOWN;
+                info.reset();
             }
         }
         else
         {
             std::cerr << "[ERROR] invalid input string: " +  token<< std::endl;
-            info.act = ACTION::UNKNOWN;
-            return info;
+            info.reset();
         }
     }
 

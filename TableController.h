@@ -12,10 +12,12 @@ public:
 
     void CheckCommandInfo(CommandInfo info);
 
+    bool IsRobotInitialized();
+    CoordinateAndDirection getRobotCoordinateAndDirection() const;
+
 private:
     int xMax = 0;
     int yMax = 0;
 
     std::unique_ptr<Robot> robot = nullptr;
-    static const std::map<FACE_DIRECTION, std::string> directions;
 };

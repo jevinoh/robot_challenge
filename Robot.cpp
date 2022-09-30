@@ -1,34 +1,35 @@
 #include "Robot.h"
 
-Robot::Robot(int xc, int yc, FACE_DIRECTION dir) : x(xc), y(yc), direction(dir)
+Robot::Robot(int xc, int yc, FACE_DIRECTION dir)
 {
-    printf(">>>>> Initial value : %d, %d, %d\n", x,  y, static_cast<int>(dir));
+    info.x = xc;
+    info.y = yc;
+    info.dir = dir;
 }
 
 void Robot::MoveUp()
 {
-    y += 1;
+    info.y += 1;
 }
 
 void Robot::MoveDown()
 {
-    y -= 1;
+    info.y -= 1;
 }
 
 void Robot::MoveLeft()
 {
-
-    x -= 1;
+    info.x -= 1;
 }
 
 void Robot::MoveRight()
 {
-    x += 1;
+    info.x += 1;
 }
 
 void Robot::Move()
 {
-    switch(direction)
+    switch(info.dir)
     {
         case FACE_DIRECTION::NORTH:
             MoveUp();
@@ -49,30 +50,35 @@ void Robot::Move()
 
 int  Robot::GetCoordinateX() const
 {
-    return x;
+    return info.x;
 }
 
 int  Robot::GetCoordinateY() const
 {
-    return y;
+    return info.y;
 }
 
 FACE_DIRECTION Robot::GetFacingDirection() const
 {
-    return direction;
+    return info.dir;
+}
+
+CoordinateAndDirection Robot::GetRobotCoordinateAndDirection() const
+{
+    return info;
 }
 
 void Robot::SetCoordinateX(int xVal)
 {
-    x = xVal;
+    info.x = xVal;
 }
 
 void Robot::SetCoordinateY(int yVal)
 {
-    y = yVal;
+    info.y = yVal;
 }
 
 void Robot::SetFacingDirection(FACE_DIRECTION dir)
 {
-    direction = dir;
+    info.dir = dir;
 }

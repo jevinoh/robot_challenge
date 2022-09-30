@@ -3,10 +3,10 @@
 #include "Utils.h"
 #include <map>
 
-class InputController
+class InputParser
 {
 public:
-    InputController();
+    InputParser();
 
     CommandInfo Parse(std::string input);
 
