@@ -1,13 +1,5 @@
 #include "TableController.h"
 
-const std::map<FACE_DIRECTION, std::string> TableController::directions = {
-    { FACE_DIRECTION::NORTH , "NORTH"},
-    { FACE_DIRECTION::EAST  , "EAST" },
-    { FACE_DIRECTION::SOUTH , "SOUTH"},
-    { FACE_DIRECTION::WEST  , "WEST" },
-};
-
-
 TableController::TableController(int xM, int yM) : xMax(xM), yMax(yM)
 {
 }
@@ -40,7 +32,7 @@ void TableController::CheckCommandInfo(CommandInfo info)
     }
     else if(robot && info.act == ACTION::REPORT)
     {
-        printf(">>>>> %d, %d, %s\n", robot->GetCoordinateX(),  robot->GetCoordinateY(), directions.at(robot->GetFacingDirection()).c_str());
+        printf(">>>>> %d, %d, %s\n", robot->GetCoordinateX(),  robot->GetCoordinateY(), directionsToString.at(robot->GetFacingDirection()).c_str());
     }
     else if(robot && info.act == ACTION::MOVE)
     {
@@ -67,7 +59,7 @@ void TableController::CheckCommandInfo(CommandInfo info)
 
         if((tempX < 0) || (tempX > xMax) || (tempY < 0) || (tempY > yMax))
         {
-            printf("[ERROR] Ignoring MOVE command, the Robot may fall out of the table\n");
+            printf("[ERROR] Ignoring MOVE command, the Robot may fall off the table\n");
         }
         else
         {
@@ -103,4 +95,14 @@ void TableController::CheckCommandInfo(CommandInfo info)
     {
         printf("[ERROR] Robot not initialized\n");
     }
+}
+
+bool TableController::IsRobotInitialized()
+{
+    return robot ? true: false;
+}
+
+CoordinateAndDirection TableController::getRobotCoordinateAndDirection() const
+{
+    return robot->GetRobotCoordinateAndDirection();
 }
